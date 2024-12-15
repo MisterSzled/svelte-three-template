@@ -6,7 +6,14 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass';
 import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
 
-const getPostProcessor = (scene, camera, renderer, gui) => {
+export interface PostProcessor {
+        bloomPass: UnrealBloomPass;
+        bloomLayer: THREE.Layers;
+        bloomComposer: EffectComposer;
+        finalComposer: EffectComposer;
+}
+
+const getPostProcessor = (scene, camera, renderer, gui): PostProcessor => {
         const BLOOM_SCENE = 1;
         const bloomLayer = new THREE.Layers();
         bloomLayer.set(BLOOM_SCENE);
@@ -82,7 +89,6 @@ const getPostProcessor = (scene, camera, renderer, gui) => {
         finalComposer.addPass(effectFXAA);
         finalComposer.addPass(mixPass);
         finalComposer.addPass(outputPass);
-
 
         const entityFolder = gui.addFolder('bloom');
         entityFolder.add(bloomPass, "threshold", 0, 1, 0.01).name("threshold");

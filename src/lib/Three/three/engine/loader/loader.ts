@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { createEventEmitter } from '../eventEmitter/eventEmitter';
+import { Resources } from "./types";
 
 import sources from "./sources";
 
@@ -9,7 +10,12 @@ const GLTF_Loader = new GLTFLoader(manager);
 const Texture_Loader = new THREE.TextureLoader(manager);
 const CubeTexture_Loader = new THREE.CubeTextureLoader(manager);
 
-const getLoader = (): any => {
+const getLoader = (): {
+        resources: Resources;
+        load: (resourceBundleName: string) => Promise<void>;
+        on: (eventName: string, id: string, callback: (args: any) => void) => void;
+        emit: (eventName: string, ...args: any[]) => void;
+} => {
         const baseLoader = createEventEmitter();
         const resources: Record<string, any> = {};
 

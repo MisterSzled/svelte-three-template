@@ -45,7 +45,7 @@ const createScene = (canvas: HTMLCanvasElement, window: Window) => {
                 console.log("Loaded: ", args);
 
                 toggleLoadedStage(0);
-                conductor(timer, scene, camera, controls, renderer, postprocessor, loader.resources["main"], animator, gui);
+                conductor(timer, scene, camera, controls, renderer, postprocessor, loader.resources, animator, gui);
         });
 
 

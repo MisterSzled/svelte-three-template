@@ -1,9 +1,22 @@
 import * as THREE from 'three';
 import * as TWEEN from "@tweenjs/tween.js";
+import { Timer } from '../timer/timer';
+import Stats from "stats.js";
+import { PostProcessor } from '../postprocessing/postprocessing';
+import { OrbitControls } from 'three/examples/jsm/Addons.js';
+import { Animator } from "./types";
 
 let ENABLE_BLOOM = 0;
 
-function getAnimator(timer: any, renderer: any, scene: any, camera: any, stats: any, postprocessor: any, controls: any) {
+function getAnimator(
+        timer: Timer,
+        renderer: THREE.WebGLRenderer,
+        scene: THREE.Scene,
+        camera: THREE.PerspectiveCamera,
+        stats: Stats,
+        postprocessor: PostProcessor,
+        controls: OrbitControls
+): Animator {
         renderer.render(scene, camera);
         const mixer = new THREE.AnimationMixer();
 
@@ -19,7 +32,15 @@ function getAnimator(timer: any, renderer: any, scene: any, camera: any, stats: 
         }
 }
 
-function animate(timer: any, renderer: THREE.Renderer, scene: THREE.Scene, camera: THREE.PerspectiveCamera, postprocessor: any, controls: any, mixer: any) {
+function animate(
+        timer: Timer, 
+        renderer: THREE.WebGLRenderer, 
+        scene: THREE.Scene, 
+        camera: THREE.PerspectiveCamera, 
+        postprocessor: PostProcessor, 
+        controls: OrbitControls, 
+        mixer: THREE.AnimationMixer
+) {
         controls.update();
         mixer.update(timer.getDelta() / 1000);
 

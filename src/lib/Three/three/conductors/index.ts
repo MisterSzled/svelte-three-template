@@ -1,22 +1,28 @@
 import * as THREE from "three";
 
 import { get_environment } from "../entities/environment/environment";
-
+import { Timer } from "../engine/timer/timer";
+import GUI from "lil-gui";
 import { runConcurrentAnimations } from "./_HELPERS_";
 import { get_camera_entity } from "../entities/camera/camera";
 import { stages } from "../../../stores/state";
+import { OrbitControls } from "three/examples/jsm/Addons.js";
+import { PostProcessor } from "../engine/postprocessing/postprocessing";
+import { Resources } from "../engine/loader/types";
+import { Animator } from "../engine/animator/types";
 
 async function conductor(
-        timer: any,
+        timer: Timer,
         scene: THREE.Scene,
         camera: THREE.PerspectiveCamera,
-        controls: any,
+        controls: OrbitControls,
         renderer: THREE.WebGLRenderer,
-        postprocessor: any,
-        resources: any,
-        animator: any,
-        gui: any
+        postprocessor: PostProcessor,
+        resources: Resources,
+        animator: Animator,
+        gui: GUI
 ) {
+        let main_resources = resources["main"];
         renderer.toneMappingExposure = 0.001;
         postprocessor.bloomPass.strength = 0;
 
@@ -33,7 +39,7 @@ async function conductor(
 
         stages.subscribe((stages) => {
                 if (stages.start["0"]) {
-                        let ghost = resources.ghost.scene;
+                        let ghost = main_resources.ghost.scene;
                         ghost.position.y = -1.5;
                         scene.add(ghost);
 
@@ -64,9 +70,9 @@ async function conductor(
                         const backLightHelper = new THREE.PointLightHelper(backLight, 0.5);
                         scene.add(keyLightHelper, fillLightHelper, backLightHelper);
 
-                        if (resources.ghost.animations && resources.ghost.animations.length > 0) {
+                        if (main_resources.ghost.animations && main_resources.ghost.animations.length > 0) {
 
-                                resources.ghost.animations.forEach((clip) => {
+                                main_resources.ghost.animations.forEach((clip) => {
                                         const action = animator.mixer.clipAction(clip, ghost);
                                         action.play();
                                 });
@@ -75,7 +81,5 @@ async function conductor(
         });
 
 }
-
-
 
 export { conductor }

@@ -1,6 +1,6 @@
 import { createEventEmitter, EventEmitter } from "../eventEmitter/eventEmitter";
 
-interface Timer extends EventEmitter {
+export interface Timer extends EventEmitter {
         getElapsed: () => number;
         getDelta: () => number;
 }
